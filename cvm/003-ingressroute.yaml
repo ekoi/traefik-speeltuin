@@ -1,0 +1,20 @@
+# IngresRoute
+---
+kind: IngressRoute
+apiVersion: traefik.containo.us/v1alpha1
+metadata:
+  name: cvm
+  namespace: default
+
+spec:
+  entryPoints:
+#    - web
+    - websecure
+  routes:
+    - match: Host(`cvm.dataverse.tk`)
+      kind: Rule
+      services:
+        - name: cvm
+          port: 9266
+  tls:
+    certResolver: default

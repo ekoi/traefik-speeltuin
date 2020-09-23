@@ -1,0 +1,14 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: cvm
+
+spec:
+#  type: ClusterIP
+  ports:
+    - port: 9266
+      name: cvm
+      protocol: TCP
+  selector:
+    app: cvm

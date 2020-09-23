@@ -1,0 +1,27 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: cvm
+  namespace: default
+  labels:
+    app: cvm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cvm
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: cvm
+    spec:
+      containers:
+        - name: cvm
+          image: ekoindarto/cvm:latest
+#          imagePullPolicy: Never
+          ports:
+            - name: cvm
+              containerPort: 9266
+
