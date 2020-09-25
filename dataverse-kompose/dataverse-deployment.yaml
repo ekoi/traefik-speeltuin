@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: dataverse
+  name: dataverse
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: dataverse
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: dataverse
+    spec:
+      containers:
+      - env:
+        - name: ADMIN_EMAIL
+          value: admin@localhost
+        - name: BUNDLEPROPERTIES
+          value: Bundle.properties
+        - name: CVM_SERVER_NAME
+          value: CESSDA
+        - name: CVM_SERVER_URL
+          value: https://cvm.dataverse.tk
+        - name: CVM_TSV_SOURCE
+          value: https://raw.githubusercontent.com/ekoi/speeltuin/master/resources/CMM_Custom_MetadataBlock.tsv
+        - name: HOST_DNS_ADDRESS
+          value: 0.0.0.0
+        - name: JVM_OPTS
+          value: '''-Xmx1g -Xms1g -XX:MaxPermSize=2g -XX:PermSize=2g'''
+        - name: LANG
+          value: en
+        - name: MAIL_SERVER
+          value: mailrelay
+        - name: PGPASSWORD
+          value: dvnsecret
+        - name: POSTGRES_DATABASE
+          value: dvndb
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_SERVER
+          value: postgres
+        - name: POSTGRES_USER
+          value: dvnuser
+        - name: RSERVE_HOST
+          value: localhost
+        - name: RSERVE_PASSWORD
+          value: rserve
+        - name: RSERVE_PORT
+          value: "6311"
+        - name: RSERVE_USER
+          value: rserve
+        - name: SOLR_LOCATION
+          value: solr:8983
+        - name: TWORAVENS_LOCATION
+          value: NOT INSTALLED
+        - name: WAR_FILE
+          value: https://github.com/IQSS/dataverse-docker/releases/download/5.0.1-cvm/dataverse-5_0_cvm.war
+        image: ekoindarto/dataverse-cvm:5.0
+        imagePullPolicy: ""
+        name: dataverse
+        ports:
+        - containerPort: 443
+        - containerPort: 8080
+        - containerPort: 4848
+        resources: {}
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /usr/local/payara5/glassfish/domains/domain1/autodeploy
+          name: dataverse-data
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: dataverse-data
+        persistentVolumeClaim:
+          claimName: dataverse-data
+status: {}

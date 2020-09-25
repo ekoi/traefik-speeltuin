@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: solr
+  name: solr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: solr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: solr
+    spec:
+      containers:
+      - env:
+        - name: SOLR_HOST
+          value: solr
+        - name: SOLR_JAVA_MEM
+          value: -Xms1g -Xmx1g
+        - name: SOLR_PORT
+          value: "8983"
+        image: ekoindarto/solr-cvm:latest
+        imagePullPolicy: ""
+        name: solr
+        ports:
+        - containerPort: 8983
+        resources: {}
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /opt/solr/server/solr/collection1/data
+          name: solr-data
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: solr-data
+        persistentVolumeClaim:
+          claimName: solr-data
+status: {}

@@ -1,0 +1,36 @@
+# IngresRoute
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: dataverse-web
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`speeltuin.dataverse.tk`)
+      kind: Rule
+      services:
+        - name: dataverse
+          port: 8080
+      middlewares:
+        - name: admin-websecure
+---
+kind: IngressRoute
+apiVersion: traefik.containo.us/v1alpha1
+metadata:
+  name: dataverse-websecure
+  namespace: default
+
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`speeltuin.dataverse.tk`)
+      kind: Rule
+      services:
+        - name: dataverse
+          port: 8080
+  tls:
+    certResolver: default
