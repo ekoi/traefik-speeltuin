@@ -1,0 +1,39 @@
+# IngresRoute
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: sg-web
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`sg.dataverse.tk`)
+      kind: Rule
+      services:
+        - name: sg
+          port: 8205
+      middlewares:
+        - name: admin-websecure
+---
+kind: IngressRoute
+apiVersion: traefik.containo.us/v1alpha1
+metadata:
+  name: sg-websecure
+  namespace: default
+
+spec:
+  entryPoints:
+#    - web
+    - websecure
+  routes:
+    - match: Host(`sg.dataverse.tk`)
+      kind: Rule
+      services:
+        - name: sg
+          port: 8205
+      middlewares:
+        - name: admin-websecure
+  tls:
+    certResolver: default

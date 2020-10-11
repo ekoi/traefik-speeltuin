@@ -1,0 +1,27 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: sg
+  namespace: default
+  labels:
+    app: sg
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sg
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: sg
+    spec:
+      containers:
+        - name: sg
+          image: ekoindarto/semantic-gateway:latest
+#          imagePullPolicy: Never
+          ports:
+            - name: sg
+              containerPort: 8205
+

@@ -1,0 +1,14 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sg
+
+spec:
+#  type: ClusterIP
+  ports:
+    - port: 8205
+      name: sg
+      protocol: TCP
+  selector:
+    app: sg
