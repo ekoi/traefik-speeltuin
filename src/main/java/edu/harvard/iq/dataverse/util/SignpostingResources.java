@@ -79,9 +79,12 @@ public class SignpostingResources {
         JsonArrayBuilder items = Json.createArrayBuilder();
         List<DataFile> dfs = ds.getFiles();
 
-        for (DataFile df:dfs){
+        List<FileMetadata> fms = workingDatasetVersion.getFileMetadatas();
+        for (FileMetadata fm:fms){
+            DataFile df = fm.getDataFile();
             items.add(jsonObjectBuilder().add("href", getPublicDownloadUrl(df)).add("type",df.getContentType()));
         }
+
         String lic = "";
         if (workingDatasetVersion.getTermsOfUseAndAccess().getLicense() == TermsOfUseAndAccess.License.CC0){
             //On the current Dataverse, only None and CC0. In the signposting protocol: cardinality is 1
@@ -102,7 +105,8 @@ public class SignpostingResources {
                 .add("license", jsonObjectBuilder().add("href", lic))
                 .add("item", items).add("describedby", jab);
         linkset.add(mandatory);
-        for (DataFile df:dfs){
+        for (FileMetadata fm:fms){
+            DataFile df = fm.getDataFile();
             JsonObjectBuilder itemAnchor = jsonObjectBuilder().add("anchor", getPublicDownloadUrl(df));
             itemAnchor.add("collection", Json.createArrayBuilder().add(jsonObjectBuilder()
             .add("href", landingPage)).add(jsonObjectBuilder().add("type","text/html")));
