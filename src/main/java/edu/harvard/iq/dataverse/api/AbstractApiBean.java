@@ -663,6 +663,13 @@ public abstract class AbstractApiBean {
             .build();
     }
 
+    protected Response okLinkset( JsonArrayBuilder bld ) {
+        return Response.ok( Json.createObjectBuilder()
+                .add("linkset", bld).build() )
+                .type(MediaType.APPLICATION_JSON)
+                .build();
+    }
+
     protected Response ok( String msg ) {
         return Response.ok().entity(Json.createObjectBuilder()
             .add("status", STATUS_OK)

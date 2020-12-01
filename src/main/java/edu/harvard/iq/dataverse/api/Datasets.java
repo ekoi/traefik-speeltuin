@@ -97,11 +97,7 @@ import edu.harvard.iq.dataverse.makedatacount.MakeDataCountLoggingServiceBean;
 import edu.harvard.iq.dataverse.makedatacount.MakeDataCountLoggingServiceBean.MakeDataCountEntry;
 import edu.harvard.iq.dataverse.makedatacount.MakeDataCountUtil;
 import edu.harvard.iq.dataverse.settings.SettingsServiceBean;
-import edu.harvard.iq.dataverse.util.ArchiverUtil;
-import edu.harvard.iq.dataverse.util.BundleUtil;
-import edu.harvard.iq.dataverse.util.EjbUtil;
-import edu.harvard.iq.dataverse.util.FileUtil;
-import edu.harvard.iq.dataverse.util.SystemConfig;
+import edu.harvard.iq.dataverse.util.*;
 import edu.harvard.iq.dataverse.util.json.JsonParseException;
 import edu.harvard.iq.dataverse.search.IndexServiceBean;
 import static edu.harvard.iq.dataverse.util.json.JsonPrinter.*;
@@ -246,7 +242,7 @@ public class Datasets extends AbstractApiBean {
             return ok(jsonbuilder.add("latestVersion", (latest != null) ? json(latest) : null));
         });
     }
-    
+
     // TODO: 
     // This API call should, ideally, call findUserOrDie() and the GetDatasetCommand 
     // to obtain the dataset that we are trying to export - which would handle
@@ -448,7 +444,7 @@ public class Datasets extends AbstractApiBean {
                                 .map( d -> json(d) )
                                 .collect(toJsonArray())));
     }
-    
+
     @GET
     @Path("{id}/versions/{versionId}")
     public Response getVersion( @PathParam("id") String datasetId, @PathParam("versionId") String versionId, @Context UriInfo uriInfo, @Context HttpHeaders headers) {
@@ -474,7 +470,7 @@ public class Datasets extends AbstractApiBean {
                         getDatasetVersionOrDie(req, versionId, findDatasetOrDie(datasetId), uriInfo, headers )
                                 .getDatasetFields())));
     }
-    
+
     @GET
     @Path("{id}/versions/{versionNumber}/metadata/{block}")
     public Response getVersionMetadataBlock( @PathParam("id") String datasetId, 
@@ -495,7 +491,33 @@ public class Datasets extends AbstractApiBean {
             return notFound("metadata block named " + blockName + " not found");
         });
     }
-    
+//    @GET
+//    @Path("{id}/versions/{versionId}/linkset")
+//    public Response getLinkset( @PathParam("id") String datasetId, @PathParam("versionId") String versionId, @Context UriInfo uriInfo, @Context HttpHeaders headers) {
+//        if ( ":draft".equals(versionId) ) {
+//            return badRequest("The :draft version can be viewed");
+//        }
+//        return response( req -> {
+//            DatasetVersion dsv = getDatasetVersionOrDie(req, versionId, findDatasetOrDie(datasetId), uriInfo, headers);
+//            return (dsv == null || dsv.getId() == null) ? notFound("Dataset version not found")
+//                    : ok(json(dsv));
+//        });
+//    }
+
+    @GET
+    @Path("{id}/versions/{versionId}/linkset")
+    public Response getLinkset( @PathParam("id") String datasetId, @PathParam("versionId") String versionId, @Context UriInfo uriInfo, @Context HttpHeaders headers) {
+        if ( ":draft".equals(versionId) ) {
+            return badRequest("The :draft version can be viewed");
+        }
+        return response( req -> {
+            DatasetVersion dsv = getDatasetVersionOrDie(req, versionId, findDatasetOrDie(datasetId), uriInfo, headers);
+            String dataverseSiteUrl = systemConfig.getDataverseSiteUrl();
+            String anchor = dataverseSiteUrl + "/dataset.xhtml?persistentId=" + dsv.getDataset().getPersistentURL();
+            return (dsv == null || dsv.getId() == null) ? notFound("Dataset version not found")
+                    : okLinkset(jsonLinksetx(new SignpostingResources(systemConfig, dsv)));
+        });
+    }
     @GET
     @Path("{id}/modifyRegistration")
     public Response updateDatasetTargetURL(@PathParam("id") String id ) {

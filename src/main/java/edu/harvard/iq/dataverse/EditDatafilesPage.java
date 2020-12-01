@@ -3120,8 +3120,45 @@ public class EditDatafilesPage implements java.io.Serializable {
 
     	return settingsWrapper.isRsyncUpload() && DatasetUtil.isAppropriateStorageDriver(dataset);
     }
-    
-    
+    private String txt1;
+    public String getTxt1() {
+        return txt1;
+    }
+
+
+    private String city;
+    private Map<String,String> cities = new HashMap<String, String>();
+
+    public Map<String, String> getCities() {
+        cities = new HashMap<String, String>();
+        cities.put("Article","Article");
+        cities.put("ScholarlyArticle", "ScholarlyArticle");
+        cities.put("Book","Book");
+        cities.put("Dataset","Dataset");
+        cities.put("SoftwareSourceCode","SoftwareSourceCode");
+        cities.put("ScholarlyArticle","ScholarlyArticle");
+        return cities;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+    public void setTxt1(String txt1) {
+        this.txt1 = txt1;
+    }
+    public List<String> completeText() {
+        List<String> results = new ArrayList<>();
+        results.add("eko");
+        results.add("ll");
+        results.add("k;k");
+        results.add("ekkllo");
+        results.add(";k;k");
+        return results;
+    }
     private void populateFileMetadatas() {
         fileMetadatas = new ArrayList<>();
         if (selectedFileIdsList == null || selectedFileIdsList.isEmpty()) {

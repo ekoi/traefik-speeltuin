@@ -361,6 +361,15 @@
                                         <p:inputText id="fileName" value="#{fileMetadata.label}" style="width:60%; margin-bottom:.5em;" disabled="#{fileMetadata.dataFile.filePackage}"/>
                                         <p:message for="fileName"/>
 
+                                        <label class="control-label" for="fileType" style="margin-right:1em;margin-bottom:.5em;">
+                                            File Type
+                                        </label>
+                                        <p:selectOneMenu id="fileType" value="#{EditDatafilesPage.city}" effect="fold" style="width:60%; margin-bottom:.5em;margin-left:.5em" editable="false">
+                                            <f:selectItem itemLabel="Select One" itemValue="" />
+                                            <f:selectItems value="#{EditDatafilesPage.getCities()}" />
+                                        </p:selectOneMenu>
+                                        <p:message for="fileType"/>
+
                                         <label class="control-label" for="fileDirectoryLabel" style="margin-right:1em;margin-bottom:.5em;">
                                             #{bundle['file.metadataTab.fileMetadata.hierarchy.label']}    
                                             <span class="glyphicon glyphicon-question-sign tooltip-icon"
