@@ -40,7 +40,7 @@ public class SignpostingResources {
             describedby = ", <https://citation.crosscite.org/format?style=bibtex&doi="+ ds.getAuthority() + "/"
                     + ds.getIdentifier() + "> ; rel=\"describedby\" \n" + "; type=\"application/vnd.datacite.datacite+json";
         }
-        String type = ", <https://schema.org/AboutPage> ; rel=\"type\" ,";
+        String type = ", <https://schema.org/AboutPage> ; rel=\"type\"";
 
         String lic = ""; //non only CC0
         if (workingDatasetVersion.getTermsOfUseAndAccess().getLicense() == TermsOfUseAndAccess.License.CC0){
