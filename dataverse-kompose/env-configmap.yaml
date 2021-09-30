@@ -1,0 +1,19 @@
+apiVersion: v1
+data:
+  DATAVERSE_DB_HOST: postgresql
+  DATAVERSE_DB_NAME: dataverse
+  DATAVERSE_DB_PASSWORD: changeme
+  DATAVERSE_DB_USER: dataverse
+  DATAVERSE_URL: localhost:8080
+  POSTGRES_DATABASE: dataverse
+  POSTGRES_PASSWORD: changeme
+  POSTGRES_SERVER: postgresql
+  POSTGRES_USER: dataverse
+  SOLR_SERVICE_HOST: solr
+  SOLR_SERVICE_PORT: "8983"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: dataverse-env
+  name: env

@@ -3,17 +3,17 @@ kind: Service
 metadata:
   annotations:
     kompose.cmd: kompose convert
-    kompose.version: 1.21.0 (992df58d8)
+    kompose.version: 1.24.0 (HEAD)
   creationTimestamp: null
   labels:
-    io.kompose.service: postgres
-  name: postgres
+    io.kompose.service: postgresql
+  name: postgresql
 spec:
   ports:
-  - name: "5432"
-    port: 5432
-    targetPort: 5432
+    - name: "5432"
+      port: 5432
+      targetPort: 5432
   selector:
-    io.kompose.service: postgres
+    io.kompose.service: postgresql
 status:
   loadBalancer: {}

@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   annotations:
     kompose.cmd: kompose convert
-    kompose.version: 1.21.0 (992df58d8)
+    kompose.version: 1.24.0 (HEAD)
   creationTimestamp: null
   labels:
     io.kompose.service: dataverse
@@ -19,72 +19,100 @@ spec:
     metadata:
       annotations:
         kompose.cmd: kompose convert
-        kompose.version: 1.21.0 (992df58d8)
+        kompose.version: 1.24.0 (HEAD)
       creationTimestamp: null
       labels:
         io.kompose.service: dataverse
     spec:
       containers:
-      - env:
+        - name: DATAVERSE_SITE_URL
+          value: https://speeltuin.dataverse.tk
+        - name: DATAVERSE_FQDN
+          value: speeltuin.dataverse.tk
         - name: ADMIN_EMAIL
           value: admin@localhost
         - name: BUNDLEPROPERTIES
           value: Bundle.properties
-        - name: CVM_SERVER_NAME
-          value: CESSDA
-        - name: CVM_SERVER_URL
-          value: https://cvm.dataverse.tk
-        - name: CVM_TSV_SOURCE
-          value: https://raw.githubusercontent.com/ekoi/speeltuin/master/resources/CMM_Custom_MetadataBlock.tsv
         - name: HOST_DNS_ADDRESS
           value: 0.0.0.0
         - name: JVM_OPTS
           value: '''-Xmx1g -Xms1g -XX:MaxPermSize=2g -XX:PermSize=2g'''
         - name: LANG
           value: en
+        - name: DATAVERSE_FQDN
+          value: speeltuin.dataverse.tk
         - name: MAIL_SERVER
           value: mailrelay
         - name: PGPASSWORD
           value: dvnsecret
-        - name: POSTGRES_DATABASE
-          value: dvndb
-        - name: POSTGRES_PORT
-          value: "5432"
-        - name: POSTGRES_SERVER
-          value: postgres
-        - name: POSTGRES_USER
-          value: dvnuser
-        - name: RSERVE_HOST
-          value: localhost
-        - name: RSERVE_PASSWORD
-          value: rserve
-        - name: RSERVE_PORT
-          value: "6311"
-        - name: RSERVE_USER
-          value: rserve
-        - name: SOLR_LOCATION
-          value: solr:8983
-        - name: TWORAVENS_LOCATION
-          value: NOT INSTALLED
-        - name: WAR_FILE
-          value: https://github.com/IQSS/dataverse-docker/releases/download/5.0.1-cvm/dataverse-5_0_cvm.war
-        image: ekoindarto/dataverse-cvm:5.0
-        imagePullPolicy: ""
-        name: dataverse
-        ports:
-        - containerPort: 443
-        - containerPort: 8080
-        - containerPort: 4848
-        resources: {}
-        securityContext:
-          privileged: true
-        volumeMounts:
-        - mountPath: /usr/local/payara5/glassfish/domains/domain1/autodeploy
-          name: dataverse-data
+        - env:
+            - name: DATAVERSE_DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: DATAVERSE_DB_HOST
+                  name: env
+            - name: DATAVERSE_DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: DATAVERSE_DB_NAME
+                  name: env
+            - name: DATAVERSE_DB_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: DATAVERSE_DB_PASSWORD
+                  name: env
+            - name: DATAVERSE_DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: DATAVERSE_DB_USER
+                  name: env
+            - name: DATAVERSE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DATAVERSE_URL
+                  name: env
+            - name: POSTGRES_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_DATABASE
+                  name: env
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_PASSWORD
+                  name: env
+            - name: POSTGRES_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_SERVER
+                  name: env
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_USER
+                  name: env
+            - name: SOLR_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: SOLR_SERVICE_HOST
+                  name: env
+            - name: SOLR_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: SOLR_SERVICE_PORT
+                  name: env
+          image: ekoindarto/dataverse:5.7.beta-20210930
+          imagePullPolicy: Always
+          name: dataverse
+          ports:
+            - containerPort: 8080
+          resources: {}
+#          volumeMounts:
+#            - mountPath: /secrets
+#              name: dataverse-claim0
       restartPolicy: Always
-      serviceAccountName: ""
       volumes:
-      - name: dataverse-data
-        persistentVolumeClaim:
-          claimName: dataverse-data
+        - name: dataverse-claim0
+          persistentVolumeClaim:
+            claimName: dataverse-claim0
 status: {}

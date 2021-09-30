@@ -3,16 +3,16 @@ kind: Service
 metadata:
   annotations:
     kompose.cmd: kompose convert
-    kompose.version: 1.21.0 (992df58d8)
+    kompose.version: 1.24.0 (HEAD)
   creationTimestamp: null
   labels:
     io.kompose.service: solr
   name: solr
 spec:
   ports:
-  - name: "8983"
-    port: 8983
-    targetPort: 8983
+    - name: "8983"
+      port: 8983
+      targetPort: 8983
   selector:
     io.kompose.service: solr
 status:
